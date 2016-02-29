@@ -47,6 +47,10 @@ public class PrefsStore {
         return result;
     }
 
+    public void put(String key, Object value) {
+        set(key, value);
+    }
+
     public void set(String key, Object value) {
         SharedPreferences prefs = getPrefs();
         prefs.edit().putString(key, this.gson.toJson(value)).apply();
