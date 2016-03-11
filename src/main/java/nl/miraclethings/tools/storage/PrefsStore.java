@@ -54,8 +54,6 @@ public class PrefsStore {
     public void set(String key, Object value) {
         SharedPreferences prefs = getPrefs();
         prefs.edit().putString(key, this.gson.toJson(value)).apply();
-        // invalidate cache
-        localCache.remove(key);
     }
 
     public void clear() {

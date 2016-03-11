@@ -1,6 +1,7 @@
 package nl.miraclethings.tools.ui;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -18,6 +19,12 @@ public class TooltipFrameLayout extends FrameLayout {
     private Paint mBG;
     private RectF mMainRect;
     private float mCornerRadius;
+    private int position;
+
+    private final int TOP = 0;
+    private final int BOTTOM = 1;
+    private final int LEFT = 2;
+    private final int RIGHT = 3;
 
     public TooltipFrameLayout(Context context) {
         super(context);
@@ -26,13 +33,29 @@ public class TooltipFrameLayout extends FrameLayout {
 
     public TooltipFrameLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        getAttributes(attrs);
         init();
     }
 
     public TooltipFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        getAttributes(attrs);
         init();
     }
+
+    private void getAttributes(AttributeSet attrs) {
+        TypedArray a = getContext().getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.TooltipFrameLayout,
+                0, 0);
+
+        if (a.hasValue(R.styleable.TooltipFrameLayout_position)) {
+            position = a.getInt(R.styleable.TooltipFrameLayout_position, 0);
+        }
+
+        a.recycle();
+    }
+
 
     private void init() {
         mBG = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -50,6 +73,8 @@ public class TooltipFrameLayout extends FrameLayout {
         mMainRect.right = getWidth() - getPaddingRight();
         mMainRect.bottom = getHeight() - getPaddingBottom();
 
+        System.out.println("width: " + getWidth());
+
         mCornerRadius = LayoutUtil.dpToPx(10, getContext());
     }
 
@@ -63,11 +88,20 @@ public class TooltipFrameLayout extends FrameLayout {
         // draw the tip
         float d = getPaddingTop() + 2;
         float c = mMainRect.left + (mMainRect.right - mMainRect.left) / 2;
-
+        float h = getHeight();
         Path path = new Path();
-        path.moveTo(c-d, d);
-        path.lineTo(c, 0);
-        path.lineTo(c+d, d);
+        switch (position) {
+            case TOP:
+                path.moveTo(c - d, d);
+                path.lineTo(c, 0);
+                path.lineTo(c + d, d);
+                break;
+            case BOTTOM:
+                path.moveTo(c - d, h - d);
+                path.lineTo(c, h);
+                path.lineTo(c + d, h - d);
+                break;
+        }
         path.close();
         canvas.drawPath(path, mBG);
 
