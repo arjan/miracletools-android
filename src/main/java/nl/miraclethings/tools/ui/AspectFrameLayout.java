@@ -16,6 +16,7 @@ public class AspectFrameLayout extends FrameLayout {
 
     public AspectFrameLayout(Context context) {
         super(context);
+        setAspectRatio(1f);
     }
 
     public AspectFrameLayout(Context context, AttributeSet attrs)
