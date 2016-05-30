@@ -1,10 +1,14 @@
 package nl.miraclethings.tools.ui;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.provider.MediaStore;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -18,6 +22,12 @@ import nl.miraclethings.tools.data.DateUtil;
 public class CameraUtil {
 
     public static List<ImageMetadata> getPicturesTaken(Context context, Date from, Date to) {
+        List<ImageMetadata> result = new LinkedList<>();
+
+        if (!hasExternalStoragePermission(context)) {
+            return result;
+        }
+
         // Find the last picture
         String[] projection = new String[]{
                 MediaStore.Images.ImageColumns._ID,
@@ -29,7 +39,6 @@ public class CameraUtil {
                 .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
                         null, MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
 
-        List<ImageMetadata> result = new LinkedList<>();
 
         // Put it in the image view
         assert cursor != null;
@@ -56,7 +65,14 @@ public class CameraUtil {
         return result;
     }
 
-    public static class ImageMetadata implements Comparable<ImageMetadata> {
+    public static boolean hasExternalStoragePermission(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        }
+        return true;
+    }
+
+    public static class ImageMetadata implements Comparable<ImageMetadata>, Serializable {
         public File file;
         public String mime;
         public Date dateTaken;
@@ -79,6 +95,26 @@ public class CameraUtil {
 
         public Date getBaseDate() {
             return DateUtil.getBaseDate(dateTaken, Calendar.DATE);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            ImageMetadata that = (ImageMetadata) o;
+
+            if (!file.equals(that.file)) return false;
+            if (!mime.equals(that.mime)) return false;
+            return dateTaken.equals(that.dateTaken);
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = file.hashCode();
+            result = 31 * result + mime.hashCode();
+            return result;
         }
     }
 }

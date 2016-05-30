@@ -15,6 +15,10 @@ public class DateUtil {
         return instance;
     }
 
+    public static Date getBaseDate(Date date) {
+        return getBaseDate(date, Calendar.DATE);
+    }
+
     public static Date getBaseDate(Date date, int dateType) {
         Calendar instance = Calendar.getInstance();
         instance.setTime(date);
