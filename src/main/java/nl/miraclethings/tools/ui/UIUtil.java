@@ -3,6 +3,7 @@ package nl.miraclethings.tools.ui;
 /**
  * Created by arjan on 20-3-16.
  */
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
@@ -22,5 +23,10 @@ public class UIUtil {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
+    }
+
+    @SuppressLint("DefaultLocale")
+    public static String resourceUriString(Context context, int resourceId) {
+        return String.format("android.resource://%s/%d", context.getPackageName(), resourceId);
     }
 }
