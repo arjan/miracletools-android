@@ -5,7 +5,7 @@ import android.content.res.TypedArray;
 import android.util.TypedValue;
 import android.widget.TextView;
 import android.view.View;
-import org.apache.commons.lang.StringUtils;
+import android.text.TextUtils;
 
 /**
  * Created by arjan on 29-2-16.
