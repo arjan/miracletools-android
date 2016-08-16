@@ -29,7 +29,7 @@ public class LayoutUtil {
     public static void setTextOrHide(TextView textView, String content){
         if(textView != null){
             textView.setText(content);
-            textView.setVisibility(StringUtils.isEmpty(content)?View.GONE: View.VISIBLE);
+            textView.setVisibility(TextUtils.isEmpty(content)?View.GONE: View.VISIBLE);
         }
     }
 }
