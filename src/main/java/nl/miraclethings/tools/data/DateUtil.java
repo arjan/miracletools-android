@@ -19,9 +19,15 @@ public class DateUtil {
         return getBaseDate(date, Calendar.DATE);
     }
 
-    public static Date getBaseDate(Date date, int dateType) {
+    Date getBaseDate(Date date, int dateType) {
+        if(date == null) return null;
         Calendar instance = Calendar.getInstance();
         instance.setTime(date);
+        if(dateType == Calendar.MONTH){
+            instance.set(Calendar.DAY_OF_MONTH, 1);
+            instance.add(Calendar.HOUR_OF_DAY, -6);
+            instance.set(Calendar.HOUR_OF_DAY, 0);
+        }
         if (dateType == Calendar.DATE) {
             instance.add(Calendar.HOUR_OF_DAY, -6);
             instance.set(Calendar.HOUR_OF_DAY, 0);
