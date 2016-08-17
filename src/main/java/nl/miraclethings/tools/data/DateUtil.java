@@ -19,7 +19,7 @@ public class DateUtil {
         return getBaseDate(date, Calendar.DATE);
     }
 
-    Date getBaseDate(Date date, int dateType) {
+    public static Date getBaseDate(Date date, int dateType) {
         if(date == null) return null;
         Calendar instance = Calendar.getInstance();
         instance.setTime(date);
